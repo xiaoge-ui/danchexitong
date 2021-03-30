@@ -1,0 +1,89 @@
+.header {
+    background: #fff;
+    width: 100%;
+
+    .header-top {
+        height: 60px;
+        line-height: 60px;
+        text-align: right;
+        padding: 0px 20px;
+
+        .logo1 {
+            line-height: 60px;
+            text-align: left;
+
+            img {
+                width: 40px;
+            }
+
+            h1 {
+                color: #ffffff;
+                display: inline;
+                vertical-align: middle;
+                margin: 0px 0px 0px 10px;
+                font-size: 18px;
+            }
+
+        }
+
+        span {
+            color: rgba(0, 0, 0, .65);
+        }
+
+        a {
+            margin-left: 20px;
+        }
+    }
+
+    .column {
+        height: 40px;
+        line-height: 40px;
+        border-top: 1px solid #0099ff;
+        padding: 0px 20px;
+
+        .column-title {
+            text-align: center;
+            font-size: 18px;
+            font-weight: 400;
+
+            &::after {
+                position: absolute;
+                top: 39px;
+                left: 95px;
+                content: "";
+                border-left: 10px solid transparent;
+                border-top: 10px solid #fff;
+                border-right: 10px solid transparent;
+            }
+        }
+
+        .weather {
+            text-align: right;
+
+            .time {
+                margin-right: 10px;
+            }
+
+            .weather-detail {
+                vertical-align: middle;
+                margin-right: 15px;
+            }
+        }
+    }
+}
+
+.simple {
+    .header-top {
+        background: #1890ff;
+        color: #fff;
+
+        span {
+            color: #ffffff;
+        }
+
+        a {
+            margin-left: 20px;
+            color: #ffffff;
+        }
+    }
+}

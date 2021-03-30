@@ -1,0 +1,43 @@
+@import 'default.less';
+@import 'loading.less';
+
+ul,
+li {
+    list-style-type: none;
+}
+
+.clearfix {
+    &::after {
+        content: ' ';
+        clear: both;
+        display: block;
+        visibility: hidden;
+    }
+}
+
+.container {
+    display: flex;
+
+    .nav-left {
+        width: 15%;
+        min-width: 200px;
+        height: calc(100vh);
+        background: #001529;
+    }
+
+    .header-item {
+        background: #f00;
+    }
+
+    .main {
+        flex: 1;
+        height: calc(100vh);
+        background: #f0f2f5;
+        overflow: auto;
+
+        .content {
+            position: relative;
+            padding: 20px;
+        }
+    }
+}

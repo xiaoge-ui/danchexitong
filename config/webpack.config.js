@@ -61,6 +61,8 @@ const swSrc = paths.swSrc;
 // style files regexes
 const cssRegex = /\.css$/;
 const cssModuleRegex = /\.module\.css$/;
+const lessRegex = /\.less$/;
+const lessModuleRegex = /\.module\.less$/;
 const sassRegex = /\.(scss|sass)$/;
 const sassModuleRegex = /\.module\.(scss|sass)$/;
 
@@ -137,25 +139,36 @@ module.exports = function (webpackEnv) {
           sourceMap: isEnvProduction ? shouldUseSourceMap : isEnvDevelopment,
         },
       },
+      {
+        loader: require.resolve('less-loader'),
+      },
     ].filter(Boolean);
     if (preProcessor) {
-      loaders.push(
-        {
-          loader: require.resolve('resolve-url-loader'),
-          options: {
-            sourceMap: isEnvProduction ? shouldUseSourceMap : isEnvDevelopment,
-            root: paths.appSrc,
-          },
+      loaders.push({
+        loader: require.resolve(preProcessor),
+        options: {
+          sourceMap: isEnvProduction && shouldUseSourceMap,
+          javascriptEnabled: true,
         },
-        {
-          loader: require.resolve(preProcessor),
-          options: {
-            sourceMap: true,
-          },
-        }
-      );
+      });
     }
     return loaders;
+    // if (preProcessor) {
+    //   let loader = require.resolve(preProcessor)
+    //   if (preProcessor === "less-loader") {
+    //     loader = {
+    //       loader,
+    //       options: {
+    //         modifyVars: { //自定义主题
+    //           'primary-color': ' #f9c700 ',
+    //         },
+    //         javascriptEnabled: true,
+    //       }
+    //     }
+    //   }
+    //   loaders.push(loader);
+    // }
+    // return loaders;
   };
 
   return {
@@ -436,7 +449,7 @@ module.exports = function (webpackEnv) {
             // Process any JS outside of the app with Babel.
             // Unlike the application JS, we only compile the standard ES features.
             {
-              test: /\.(js|mjs)$/,
+              test: /\.(js|jsx|mjs)$/,
               exclude: /@babel(?:\/|\\{1,2})runtime/,
               loader: require.resolve('babel-loader'),
               options: {
@@ -495,6 +508,41 @@ module.exports = function (webpackEnv) {
                   getLocalIdent: getCSSModuleLocalIdent,
                 },
               }),
+            },
+            {
+              test: lessRegex,
+              exclude: lessModuleRegex,
+              use: getStyleLoaders(
+                {
+                  importLoaders: 3,
+                  sourceMap: isEnvProduction
+                    ? shouldUseSourceMap
+                    : isEnvDevelopment,
+                },
+                'less-loader'
+              ),
+              // Don't consider CSS imports dead code even if the
+              // containing package claims to have no side effects.
+              // Remove this when webpack adds a warning or an error for this.
+              // See https://github.com/webpack/webpack/issues/6571
+              sideEffects: true,
+            },
+            // Adds support for CSS Modules, but using SASS
+            // using the extension .module.scss or .module.sass
+            {
+              test: lessModuleRegex,
+              use: getStyleLoaders(
+                {
+                  importLoaders: 3,
+                  sourceMap: isEnvProduction
+                    ? shouldUseSourceMap
+                    : isEnvDevelopment,
+                  modules: {
+                    getLocalIdent: getCSSModuleLocalIdent,
+                  },
+                },
+                'less-loader'
+              ),
             },
             // Opt-in support for SASS (using .scss or .sass extensions).
             // By default we support SASS Modules with the
